@@ -43,16 +43,11 @@ data "aws_ami" "default" {
   }
 }
 
-# GET ES DOMAIN
-data "aws_elasticsearch_domain" "es_domain" {
-  domain_name = var.es_domain_name
-}
-
 data "template_file" "bootstrap" {
   template = file("${path.module}/nginx.conf")
 
   vars = {
-    es-cluster-endpoint = data.aws_elasticsearch_domain.es_domain.endpoint
+    es-cluster-endpoint = var.es_domain_endpoint
     cognito_host        = "${var.cognito_domain_name}.auth.${var.region}.amazoncognito.com"
   }
 }
@@ -64,7 +59,7 @@ resource "aws_s3_bucket" "config_bucket" {
   tags = var.tags
 }
 
-resource "aws_s3_bucket_object" "object" {
+resource "aws_s3_bucket_object" "nginx_config" {
   bucket  = aws_s3_bucket.config_bucket.bucket
   key     = "nginx.conf"
   content = data.template_file.bootstrap.rendered
@@ -103,6 +98,10 @@ resource "aws_iam_role_policy_attachment" "ec2_role_policy_attachement" {
 resource "aws_iam_instance_profile" "profile" {
   name = "es_cognito_poc"
   role = aws_iam_role.ec2.name
+
+  depends_on = [
+    aws_s3_bucket_object.nginx_config
+  ]
 }
 
 module "asg-nginx" {

@@ -1,4 +1,4 @@
-variable "es_domain_name" {
+variable "es_domain_endpoint" {
   type = string
 }
 

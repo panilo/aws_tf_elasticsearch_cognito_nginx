@@ -24,20 +24,12 @@ resource "aws_security_group" "es_ec2_sg" {
   vpc_id = module.vpc.id
 
   ingress {
-    description = "SSH"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["37.228.243.82/32"]
-  }
-
-  ingress {
     description = "HTTPS"
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
     cidr_blocks = [
-      "37.228.243.82/32",
+      "37.228.249.103/32",
       "10.0.1.0/24",
       "10.0.2.0/24",
       "10.0.3.0/24"
@@ -50,7 +42,7 @@ resource "aws_security_group" "es_ec2_sg" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = [
-      "37.228.243.82/32",
+      "37.228.249.103/32",
       "10.0.1.0/24",
       "10.0.2.0/24",
       "10.0.3.0/24"

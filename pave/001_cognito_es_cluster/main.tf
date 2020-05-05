@@ -11,6 +11,7 @@ locals {
     project = "es_cognito_poc"
   }
   cognito_domain_name = "es-auth-poc"
+  es_domain_name      = "es-cognito-poc-open-distro"
 }
 
 
@@ -51,7 +52,7 @@ resource "aws_iam_role_policy_attachment" "es_cognito_role_policy_attachement" {
 module "es_cluster" {
   source = "./modules/es_cluster_with_cognito"
 
-  es_domain_name = "es-cognito-poc-open-distro"
+  es_domain_name = local.es_domain_name
   subnet_ids     = module.network.subnet_ids
   security_group_ids = [
     module.network.es_sg_id
@@ -63,4 +64,19 @@ module "es_cluster" {
   es_cognito_authenticated_role_arn = module.cognito.authenticated_role_arn
 
   tags = local.tags
+}
+
+# Reverse proxy
+module "reverse_proxy" {
+  source = "../002_reverse_proxy"
+
+  es_domain_name      = local.es_domain_name
+  cognito_domain_name = local.cognito_domain_name
+  vpc_id              = module.network.vpc_id
+  subnet_ids          = module.network.subnet_ids
+  security_group_ids = [
+    module.network.es_ec2_sg_id
+  ]
+  region = var.region
+  tags   = local.tags
 }

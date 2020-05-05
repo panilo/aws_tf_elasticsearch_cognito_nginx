@@ -12,7 +12,7 @@ locals {
     project = "es_cognito_poc"
   }
   cognito_domain_name = "es-auth-poc"
-  es_domain_name      = "es-cognito-fga-2"
+  es_domain_name      = "es-cognito-fga"
 }
 
 # Create VPC, Subnets, Security Groups
@@ -80,11 +80,20 @@ module "es_cluster" {
   tags = local.tags
 }
 
+data "aws_elasticsearch_domain" "es_domain" {
+  domain_name = local.es_domain_name
+
+  depends_on = [
+    module.es_cluster
+  ]
+}
+
+
 # Reverse proxy
 module "reverse_proxy" {
   source = "../002_reverse_proxy"
 
-  es_domain_name      = local.es_domain_name
+  es_domain_endpoint  = data.aws_elasticsearch_domain.es_domain.endpoint
   cognito_domain_name = local.cognito_domain_name
   vpc_id              = module.network.vpc_id
   subnet_ids          = module.network.subnet_ids

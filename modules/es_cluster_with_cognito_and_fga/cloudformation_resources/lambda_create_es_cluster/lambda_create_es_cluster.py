@@ -150,7 +150,7 @@ def create(event, context):
         raise Exception("Domain not created")
 
 
-# @helper.poll_create
+@helper.poll_create
 def pool_create(event, context):
     logger.debug("Attemp update...")
 
