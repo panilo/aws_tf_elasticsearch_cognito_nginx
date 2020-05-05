@@ -19,6 +19,7 @@ resource "aws_lb_target_group" "default" {
   health_check {
     path     = var.health_check_path
     protocol = var.health_check_protocol
+    matcher  = var.health_check_matcher
 
     healthy_threshold   = 6
     unhealthy_threshold = 5

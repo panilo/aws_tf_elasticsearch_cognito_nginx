@@ -33,6 +33,11 @@ variable "health_check_protocol" {
   default = "HTTPS"
 }
 
+variable "health_check_matcher" {
+  type    = string
+  default = "200,300,301,302"
+}
+
 variable "tags" {
   type    = map(string)
   default = {}
