@@ -9,3 +9,7 @@ output "es_ec2_sg_id" {
 output "subnet_ids" {
   value = module.subnet.created.*.id
 }
+
+output "vpc_id" {
+  value = module.vpc.id
+}
