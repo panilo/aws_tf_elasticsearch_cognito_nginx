@@ -18,7 +18,7 @@ resource "aws_launch_configuration" "default" {
     create_before_destroy = true
   }
 
-  key_name = "es_cognito_poc"
+  key_name = "es_cognito_poc_2"
 }
 
 data "null_data_source" "tags_as_list_of_maps" {

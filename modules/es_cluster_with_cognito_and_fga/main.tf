@@ -106,4 +106,8 @@ resource "aws_cloudformation_stack" "my_custom_resource" {
   }
 
   tags = var.tags
+
+  lifecycle {
+    ignore_changes = all
+  }
 }

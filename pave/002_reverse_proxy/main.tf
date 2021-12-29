@@ -53,7 +53,7 @@ data "template_file" "bootstrap" {
 }
 
 resource "aws_s3_bucket" "config_bucket" {
-  bucket = "es-cognito-poc-bucket"
+  bucket = "es-cognito-poc-bucket-asd"
   acl    = "private"
 
   tags = var.tags
